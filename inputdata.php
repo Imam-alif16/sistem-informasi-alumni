@@ -17,7 +17,7 @@
         // check apakah data berhasil ditambahkan atau tidak
         if(tambah($_POST) > 0 ) {
             echo "<script>alert('Selamat data berhasil ditambahkan')</script>";
-            echo "<script>window.location.href = 'index.php'</script>";
+            echo "<script>window.location.href = 'inputdata.php'</script>";
         }
         else {
             echo "<script>alert('Data gagal ditambahkan, cek inputan kembali')</script>";
@@ -106,8 +106,9 @@
               id="nim"
               placeholder=""
               name="nim"
-              min="11"
-              max="11"
+              minlength= 11
+              maxlength= 11
+              pattern="[0-9]+"
               required
             />
 
@@ -118,6 +119,8 @@
               id="nama"
               placeholder=""
               name="nama"
+              maxlength="100"
+              pattern="[A-z\s]+"
               required
             />
 
@@ -128,6 +131,8 @@
               id="prodi"
               placeholder=""
               name="prodi"
+              maxlength="30"
+              pattern="[A-z\s]+"
               required
             />
 
@@ -138,6 +143,9 @@
               id="thlulus"
               placeholder=""
               name="thlulus"
+              minlength=4
+              maxlength=4
+              pattern="[0-9]+"
               required
             />
 
@@ -158,6 +166,37 @@
       crossorigin="anonymous"
     ></script>
 
+    <script>
+      var fieldNim = document.querySelector("input[name=nim]");
+      var fieldNama = document.querySelector("input[name=nama]");
+      var fieldProdi = document.querySelector("input[name=prodi]");
+      var fieldTahun = document.querySelector("input[name=thlulus]");
+
+      fieldNim.addEventListener("invalid", function(){
+        this.setCustomValidity('');
+        if (!this.validity.valid) {
+            this.setCustomValidity('Inputan salah, silahkan ganti dengan format angka (11 digit)');  
+        }
+      });
+      fieldNama.addEventListener("invalid", function(){
+        this.setCustomValidity('');
+        if (!this.validity.valid) {
+            this.setCustomValidity('Inputan salah, silahkan ganti dengan format huruf');  
+        }
+      });
+      fieldProdi.addEventListener("invalid", function(){
+        this.setCustomValidity('');
+        if (!this.validity.valid) {
+            this.setCustomValidity('Inputan salah, silahkan ganti dengan format huruf');  
+        }
+      });
+      fieldTahun.addEventListener("invalid", function(){
+        this.setCustomValidity('');
+        if (!this.validity.valid) {
+            this.setCustomValidity('Inputan salah, silahkan ganti dengan format angka (4 digit)');  
+        }
+      });
+    </script>
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
