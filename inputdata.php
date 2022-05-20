@@ -17,7 +17,7 @@
         // check apakah data berhasil ditambahkan atau tidak
         if(tambah($_POST) > 0 ) {
             echo "<script>alert('Selamat data berhasil ditambahkan')</script>";
-            echo "<script>window.location.href = 'inputdata.php'</script>";
+            echo "<script>window.location.href = 'pencarian.php'</script>";
         }
         else {
             echo "<script>alert('Data gagal ditambahkan, cek inputan kembali')</script>";
