@@ -14,8 +14,10 @@ require 'functions.php';
 if (isset($_POST["register"])) {
     
     if (regristasi($_POST) > 0) {
-      $message = "Registrasi Berhasil Silahkan Tekan Button Login Untuk Masuk";
+      $message = "Registrasi berhasil silahkan login ";
       echo "<script type='text/javascript'>alert('$message');</script>";
+      echo "<script>window.location.href = 'login.php'</script>";
+      
     }
 
     else {
