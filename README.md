@@ -15,3 +15,8 @@ CREATE TABLE user(
         username VARCHAR(50) UNIQUE,
         password VARCHAR(255));
     )
+
+CREATE TABLE alu(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+        alunim VARCHAR(11) UNIQUE,
+        alupassword VARCHAR(255));
