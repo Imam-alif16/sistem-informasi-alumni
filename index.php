@@ -1,17 +1,20 @@
 <?php
     session_start();
 
-    if(!isset($_SESSION["login"])) {
+    // menghubungkan ke function
+    require "functions.php";
+
+    if(!isset($_SESSION["login"]) && !isset($_SESSION["alulogin"])) {
         header("Location: login.php");
         exit;
     }
 
-    // menghubungkan ke function
-    require "functions.php";
-    $alumni = query("SELECT * FROM alumni ORDER BY nim ASC");
-
-    if(isset($_POST["cari"])) {
-        $alumni = cari($_POST["keyword"]);
+    if(isset($_SESSION["alulogin"])) {
+        $alunim = $_SESSION["alunim"];  
+        $alul = query("SELECT * FROM alumni WHERE nim = $alunim");
+        if($alul == false) {
+            header("Location: local.php");
+        }
     }
 ?>
 
