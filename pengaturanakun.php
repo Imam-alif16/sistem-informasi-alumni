@@ -1,3 +1,26 @@
+<?php
+  session_start();
+  $conn = mysqli_connect("localhost", "root", "", "sistem_alumni");
+    
+  if(isset($_SESSION["alulogin"])) {
+
+    $alunim = $_SESSION["alunim"];  
+    $alumni = mysqli_query($conn, "SELECT * FROM alumni WHERE nim = $alunim");
+    
+    if($alumni == false) {
+        echo "<script>alert('Daftarkan data terlebih dahulu')</script>";
+        echo "<script>window.location.href = 'inputdata.php'</script>";
+    }
+      
+    foreach($alumni as $tabel) {
+        $nim = $tabel['nim'];
+        $nama = $tabel['nama'];
+        $prodi = $tabel['prodi'];
+        $thlulus = $tabel['thlulus'];
+      }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -68,27 +91,47 @@
       <div class="mid">
         <div class="akun-sidebar">
           <ul class="menu-list">
-            <li class="menu-item"><a href="">Informasi Akun</a></li>
+            <li class="menu-item"><a href="pengaturanakun.php">Informasi Akun</a></li>
+            <li class="menu-item"><a href="gantipass.php">Ubah Password</a></li>
           </ul>
         </div>
 
         <div class="akun-info" id="">
+        
+        <?php if(isset($_SESSION["login"])) : ?>
           <div class="akun-info-judul">INFORMASI AKUN</div>
           <div class="akun-info-container">
             <div class="left-side">
               <ul>
-                <li>Username</li>
-                <li>Password</li>
+                <li>Selamat kamu adalah admin</li>
+              </ul>
+            </div>
+          </div>
+        <?php endif ?>
+
+        <?php if(isset($_SESSION["alulogin"])) : ?>
+          <div class="akun-info-judul">INFORMASI AKUN</div>
+          <div class="akun-info-container">
+            <div class="left-side">
+              <ul>
+                <li>NIM</li>
+                <li>Nama</li>
+                <li>Program Studi</li>
+                <li>Tahun Lulus</li>
               </ul>
             </div>
 
             <div class="right-side">
               <ul>
-                <li>Isi Username</li>
-                <li>Isi Password</li>
+                <li><?= $nim; ?></li>
+                <li><?= $nama; ?></li>
+                <li><?= $prodi; ?></li>
+                <li><?= $thlulus; ?></li>
               </ul>
             </div>
           </div>
+        <a href="ganti.php?nim=<?= $alunim; ?>"><button type="button" class="btn btn-secondary">Ubah Data</button></a>
+        <?php endif ?>
         </div>
       </div>
     </section>

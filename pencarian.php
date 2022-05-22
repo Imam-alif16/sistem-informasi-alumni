@@ -5,7 +5,7 @@
     require "functions.php";
 
     if(!isset($_SESSION["login"]) && !isset($_SESSION["alulogin"])) {
-        header("Location: alllogin.php");
+        header("Location: login.php");
         exit;
     }
 
@@ -74,9 +74,9 @@
           </div>
           <div class="menu">
             <ul>
-              <!-- <li>
+              <li>
                 <a href="pengaturanakun.php">Pengaturan Akun</a>
-              </li> -->
+              </li>
               <li class="last-list">
                 <a href="local.php">Logout</a>
               </li>
@@ -132,7 +132,7 @@
                   <tr>
                     <td><?php echo $no++; ?></td>
                     <td><?php echo $tabel["nama"]; ?></td>
-                    <td><?php echo $tabel["nim"]; ?></td>
+                    <td><a href="ganti.php?id=<?= $tabel['id']; ?>"><?php echo $tabel["nim"]; ?></a></td>
                     <td><?php echo $tabel["prodi"]; ?></td>
                     <td><?php echo $tabel["thlulus"]; ?></td>
                    </tr>

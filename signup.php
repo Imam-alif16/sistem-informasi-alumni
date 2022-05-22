@@ -1,31 +1,34 @@
 <?php 
+    session_start();
 
-session_start();
+    require "functions.php";
 
-// if(!isset($_SESSION["login"])) {
-//     header("Location: login.php");
-//     exit;
-// }
-
-
-require 'functions.php';
-
-// jika ditekan jalankan regristasi
-if (isset($_POST["register"])) {
-    
-    if (regristasi($_POST) > 0) {
-      $message = "Registrasi berhasil silahkan login ";
-      echo "<script type='text/javascript'>alert('$message');</script>";
-      echo "<script>window.location.href = 'login.php'</script>";
-      
+    if(isset($_SESSION["alulogin"])) {
+        header("Location: index.php");
+        exit;
     }
 
-    else {
-        echo mysqli_error($conn);
+    // jika ditekan jalankan regristasi
+    if (isset($_POST["register"])) {
+        if ($_POST["regtype"] == "regAdmin") {
+            if (regristasi($_POST) > 0) {
+                echo "<script>alert('Selamat data berhasil ditambahkan')</script>";
+                echo "<script>window.location.href = 'login.php'</script>";
+            }
+            else {
+                echo "<script>alert('Data gagal ditambahkan, cek inputan kembali')</script>";
+            }
+        }
+        else if ($_POST["regtype"] == "regAlumni") {
+            if (aluregristasi($_POST) > 0) {
+                echo "<script>alert('Selamat data berhasil ditambahkan')</script>";
+                echo "<script>window.location.href = 'login.php'</script>";
+            }
+            else {
+                echo "<script>alert('Data gagal ditambahkan, cek inputan kembali')</script>";
+            }
+        }
     }
-
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +114,16 @@ if (isset($_POST["register"])) {
                 <img src="img/View_hide_light.svg" alt="" />
               </i>
             </span> -->
-
+            <div class="mt-4">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="regtype" value="regAdmin" checked>
+                <label class="form-check-label" for="regAdmin">Admin</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="regtype" value="regAlumni">
+                <label class="form-check-label" for="regAlumni">Alumni</label>
+              </div>
+            </div>
             <a class="signup" href="#"><button type="submit" name="register">Sign Up</button></a>
         </form>
           
