@@ -1,24 +1,54 @@
 <?php
-  session_start();
-  $conn = mysqli_connect("localhost", "root", "", "sistem_alumni");
-    
-  if(isset($_SESSION["alulogin"])) {
+    session_start();
+    require "functions.php";
 
-    $alunim = $_SESSION["alunim"];  
-    $alumni = mysqli_query($conn, "SELECT * FROM alumni WHERE nim = $alunim");
-    
-    if($alumni == false) {
-        echo "<script>alert('Daftarkan data terlebih dahulu')</script>";
-        echo "<script>window.location.href = 'inputdata.php'</script>";
+    if (!isset($_SESSION["login"]) && !isset($_SESSION["alulogin"])) {
+        header("Location: index.php");
+        exit;
     }
-      
-    foreach($alumni as $tabel) {
-        $nim = $tabel['nim'];
-        $nama = $tabel['nama'];
-        $prodi = $tabel['prodi'];
-        $thlulus = $tabel['thlulus'];
-      }
-}
+
+    if (isset($_SESSION["login"])) {
+        $user = $_SESSION["username"];
+    }
+
+    elseif (isset($_SESSION["alulogin"])) {
+        $user = $_SESSION["alunim"];
+    }
+
+    if(isset($_POST["gantipass"])) {
+        $userSet = $_POST["username"];
+        $password = $_POST["password"];
+        $passwordBaru = $_POST["passwordBaru"]; 
+        $passwordBaru = password_hash($passwordBaru, PASSWORD_DEFAULT);
+
+        if (isset($_SESSION["login"])) {
+            $admin = mysqli_query($conn, "SELECT * FROM user WHERE username = '$userSet'");
+            $fetch = mysqli_fetch_assoc($admin);
+            $fetch = test_input($fetch["password"]);
+
+            if (password_verify($password, $fetch)) {
+                $setPassBaru = mysqli_query($conn, "UPDATE user SET password = '$passwordBaru' WHERE username = '$userSet'");
+                echo "<script>alert('Password berhasil diubah')</script>";
+            }
+            else {
+                $error = true;
+            }
+        }
+
+        elseif (isset($_SESSION["alulogin"])) {
+            $alumni = mysqli_query($conn, "SELECT * FROM alu WHERE alunim = '$userSet'");
+            $fetch = mysqli_fetch_assoc($alumni);
+            $fetch = test_input($fetch["alupassword"]);
+
+            if (password_verify($password, $fetch)) {
+                $setPassBaru = mysqli_query($conn, "UPDATE alu SET alupassword = '$passwordBaru' WHERE alunim = '$userSet'");
+                echo "<script>alert('Password berhasil diubah')</script>";
+            }
+            else {
+                $error = true;
+            }
+        }
+    }                  
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +85,10 @@
     <title>Sistem Informasi Alumni</title>
   </head>
   <body>
+    <?php if (isset($error)) {
+            echo "<script>alert('Password salah')</script>";
+            }
+        ?>
     <section class="pengaturan-akun">
       <div class="header">
         <h2 class="nama">Sistem Informasi Alumni</h2>
@@ -97,41 +131,29 @@
         </div>
 
         <div class="akun-info" id="">
-        
-        <?php if(isset($_SESSION["login"])) : ?>
-          <div class="akun-info-judul">INFORMASI AKUN</div>
+          <div class="akun-info-judul">UBAH PASSWORD</div>
           <div class="akun-info-container">
-            <div class="left-side">
-              <ul>
-                <li>Selamat kamu adalah admin</li>
-              </ul>
+            <form action="" method="post">
+                <input type="hidden" name="username" value="<?= $user ?>">
+                <div class="form-group">
+                    <label class="form-label" for="showUsername">Username</label>
+                    <input class="form-control" type="text" name="showUsername" value="<?= $user ?>" disabled required>
+                </div>
+                <br>
+                <div class="form-group">        
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" name="password">
+                </div>
+                <br>
+                <div class="form-group">        
+                    <label class="form-label" for="passwordBaru">Password Baru</label>
+                    <input class="form-control" type="password" name="passwordBaru">
+                </div>
+                <br>
+                <button type="submit" class="btn btn-secondary" name="gantipass">Ganti Password</button>
+            </form>
             </div>
           </div>
-        <?php endif ?>
-
-        <?php if(isset($_SESSION["alulogin"])) : ?>
-          <div class="akun-info-judul">INFORMASI AKUN</div>
-          <div class="akun-info-container">
-            <div class="left-side">
-              <ul>
-                <li>NIM</li>
-                <li>Nama</li>
-                <li>Program Studi</li>
-                <li>Tahun Lulus</li>
-              </ul>
-            </div>
-
-            <div class="right-side">
-              <ul>
-                <li><?= $nim; ?></li>
-                <li><?= $nama; ?></li>
-                <li><?= $prodi; ?></li>
-                <li><?= $thlulus; ?></li>
-              </ul>
-            </div>
-          </div>
-        <a href="ganti.php?nim=<?= $alunim; ?>"><button type="button" class="btn btn-secondary">Ubah Data</button></a>
-        <?php endif ?>
         </div>
       </div>
     </section>
@@ -152,3 +174,4 @@
     -->
   </body>
 </html>
+    

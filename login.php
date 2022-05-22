@@ -1,58 +1,103 @@
 <?php
-session_start();
-require "functions.php";
+    session_start();
 
-// cek cookie
-if (isset($_COOKIE["id"]) && isset($_COOKIE["key"])) {
-    $id = $_COOKIE["id"];
-    $key = $_COOKIE["key"];
+    require "functions.php";
 
-    // ambil username berdasarkan id
-    $result = mysqli_query($conn, "SELECT username FROM user WHERE id = $id");
-    $row = mysqli_fetch_assoc($result);
-
-    // cek cookie username
-    if($key === hash('sha256', $row['username'])) {
-        $_SESSION["login"] = true;
+    if(isset($_SESSION["login"]) && !isset($_SESSION["alulogin"]) || !isset($_SESSION["login"]) && isset($_SESSION["alulogin"])) {
+        header("Location: index.php");
+        exit;
     }
-}
 
-if(isset($_SESSION["login"])) {
-    header("Location: index.php");
-}
+    // cek cookie
+    if (isset($_COOKIE["id"]) && isset($_COOKIE["key"])) {
+        $id = $_COOKIE["id"];
+        $key = $_COOKIE["key"];
 
-// cek apa tombol submit sudah ditekan atau belum
-if(isset($_POST["login"])) {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-
-    // cek username apa ada di databse
-    $result = mysqli_query($conn, "SELECT * FROM user WHERE username = '$username'");
-
-    // cek apa username ada
-    if(mysqli_num_rows($result) === 1) {
-
-        // check password
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row["password"])) {
-            // set session
-            $_SESSION["login"] = true;
-            
-            // remember me
-            if (isset($_POST["remember"])) {
-                // buat cookie
-                
-                setcookie("id", $row['id'], time() + 60);
-                setcookie("key", hash('sha256', $row['username']), time() + 60);
+        // ambil username berdasarkan id
+        $resultAdmin = mysqli_query($conn, "SELECT username FROM user WHERE id = $id");
+        $resultAlumni = mysqli_query($conn, "SELECT alunim FROM alu WHERE id = $id");
+        
+        if (isset($resultAdmin)) {
+            $row = mysqli_fetch_assoc($resultAdmin);
+            // cek cookie username
+            if($key === hash('sha256', $row['username'])) {
+                $_SESSION["login"] = true;
             }
-            header("Location: index.php");
-            exit;
+        }
+
+        elseif (isset($resultAlumni)) {
+            $row = mysqli_fetch_assoc($resultAlumni);
+            // cek cookie alunim
+            if($key === hash('sha256', $row['alunim'])) {
+                $_SESSION["alulogin"] = true;
+            }
         }
     }
 
-    $error = true;
-}
+    // cek apa tombol submit sudah ditekan atau belum
+    if(isset($_POST["login"])) {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        
+        // cek username apa ada di databse
 
+        $rAdmin = mysqli_query($conn, "SELECT username FROM user WHERE username = '$username'");
+        $rAlumni = mysqli_query($conn, "SELECT alunim FROM alu WHERE alunim = '$username'");
+
+        $resultAdmin = mysqli_query($conn, "SELECT * FROM user WHERE username = '$username'");
+        $resultAlumni = mysqli_query($conn, "SELECT * FROM alu WHERE alunim = '$username'");    
+        
+        if (mysqli_fetch_assoc($rAdmin)) {
+             // cek apa username ada
+            if(mysqli_num_rows($resultAdmin) === 1) {
+                // check password
+                $row = mysqli_fetch_assoc($resultAdmin);
+                if (password_verify($password, $row["password"])) {
+                    // set session
+                    $_SESSION["login"] = true;
+                    foreach($resultAdmin as $assa) {
+                        $_SESSION["username"] = $assa['username'];
+                    }
+                    // remember me
+                    if (isset($_POST["remember"])) {
+                        // buat cookie
+                        setcookie("id", $row['id'], time() + 60);
+                        // mengacak username menggunakan hash
+                        // algoritma + string
+                        setcookie("key", hash('sha256', $row['username']), time() + 60);
+                    }
+                    header("Location: index.php");
+                    exit;
+                }
+            }
+        }
+
+        elseif (mysqli_fetch_assoc($rAlumni)) {
+            // cek apa alunim ada
+            if(mysqli_num_rows($resultAlumni) === 1) {
+                // check password
+                $row = mysqli_fetch_assoc($resultAlumni);
+                if (password_verify($password, $row["alupassword"])) {
+                     // set session
+                    $_SESSION["alulogin"] = true;
+                    foreach($resultAlumni as $assa) {
+                        $_SESSION["alunim"] = $assa['alunim'];
+                    }
+                    // remember me
+                    if (isset($_POST["remember"])) {
+                        // buat cookie
+                        setcookie("id", $row['id'], time() + 60);
+                        // mengacak alunim menggunakan hash
+                        // algoritma + string
+                        setcookie("key", hash('sha256', $row['alunim']), time() + 60);
+                    }
+                    header("Location: ganti.php");
+                    exit;
+                }
+            }
+        }
+        $error = true;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -130,6 +175,10 @@ if(isset($_POST["login"])) {
               </i>
             </span> -->
 
+            <div class="mt-4">
+                <input class="form-check-input" type="checkbox" name="remember">
+                <label class="form-check-label" for="remember">Remember me</label>
+            </div>
             <a class="login" href=""><button type="submit" name="login">Login</button></a>
           </form>
           

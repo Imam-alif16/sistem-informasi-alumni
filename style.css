@@ -350,7 +350,7 @@
   right: 110px;
   top: 100px;
   padding: 15px 0px;
-  width: 200px;
+  width: 225px;
   background-color: #39476d;
   border-radius: 15px;
   visibility: hidden;
@@ -501,7 +501,7 @@
   right: 110px;
   top: 100px;
   padding: 15px 0px;
-  width: 200px;
+  width: 225px;
   background-color: #39476d;
   border-radius: 15px;
   visibility: hidden;
@@ -682,7 +682,7 @@
   right: 110px;
   top: 100px;
   padding: 15px 0px;
-  width: 200px;
+  width: 225px;
   background-color: #39476d;
   border-radius: 15px;
   visibility: hidden;
@@ -903,7 +903,7 @@
   right: 110px;
   top: 100px;
   padding: 15px 0px;
-  width: 200px;
+  width: 225px;
   background-color: #39476d;
   border-radius: 15px;
   visibility: hidden;
@@ -1045,5 +1045,24 @@
   font-size: 15px;
   text-decoration: none;
   color: #39476d;
+}
+
+.pencarian_data .mid .search-results .search-results-container .table tbody tr td a:link {
+  padding: 14px 0;
+  font-family: "Poppins";
+  font-weight: 400;
+  line-height: 20px;
+  font-size: 15px;
+  text-decoration: none;
+  color: #7591e0;
+}
+
+.pencarian_data .mid .search-results .search-results-container .table tbody tr td a:hover {
+  text-decoration: underline;
+  color: #7591e0;
+}
+
+.pencarian_data .mid .search-results .search-results-container .table tbody tr td a:visited {
+  color: #7591e0;
 }
 /*# sourceMappingURL=style.css.map */
