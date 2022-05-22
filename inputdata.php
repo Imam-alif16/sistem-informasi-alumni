@@ -3,21 +3,27 @@
 
     require "functions.php";
     
-    if(isset($_SESSION["alulogin"])) {
-        header("Location: alutambah.php");
-        exit;
-    }
-    
     if(!isset($_SESSION["login"]) && !isset($_SESSION["alulogin"])) {
         header("Location: index.php");
         exit;
+    }
+
+    if (isset($_SESSION["alulogin"])) {
+        $alunim = $_SESSION["alunim"];
+        $result = mysqli_query($conn, "SELECT * FROM alumni WHERE nim = '$alunim'");
+
+        foreach($result as $tabel) {
+            if ($alunim == $tabel['nim']) {
+                header("Location: ganti.php");
+            }
+        }   
     }
 
     if(isset($_POST["submit"])) {
         // check apakah data berhasil ditambahkan atau tidak
         if(tambah($_POST) > 0 ) {
             echo "<script>alert('Selamat data berhasil ditambahkan')</script>";
-            echo "<script>window.location.href = 'pencarian.php'</script>";
+            echo "<script>window.location.href = 'index.php'</script>";
         }
         else {
             echo "<script>alert('Data gagal ditambahkan, cek inputan kembali')</script>";
@@ -75,9 +81,9 @@
           </div>
           <div class="menu">
             <ul>
-              <!-- <li>
+              <li>
                 <a href="pengaturanakun.php">Pengaturan Akun</a>
-              </li> -->
+              </li>
               <li class="last-list">
                 <a href="local.php">Logout</a>
               </li>
@@ -99,7 +105,29 @@
 
         <div class="login-form">
           <form action="" method="POST" enctype="multipart/form-data">
+            
+            <?php if (isset($_SESSION["alulogin"])) : ?>
+            <input type="hidden" name="nim" value="<?= $_SESSION["alunim"] ?>">
+            <?php endif ?>
+            
             <label for="nim" class="form-label">NIM</label>
+            <?php if (isset($_SESSION["alulogin"])) : ?>
+            <input
+              type="text"
+              class="form-control"
+              id="nimAlu"
+              value=<?php echo $_SESSION["alunim"]; ?>
+              placeholder=""
+              name="nimAlu"
+              minlength= 11
+              maxlength= 11
+              pattern="[0-9]+"
+              disabled
+              required
+            />
+            <?php endif ?>
+
+            <?php if (isset($_SESSION["login"])) : ?>
             <input
               type="text"
               class="form-control"
@@ -111,6 +139,7 @@
               pattern="[0-9]+"
               required
             />
+            <?php endif ?>
 
             <label for="nama" class="form-label">Nama</label>
             <input

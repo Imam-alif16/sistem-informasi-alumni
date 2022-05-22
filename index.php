@@ -68,9 +68,9 @@
           </div>
           <div class="menu">
             <ul>
-              <!-- <li>
+              <li>
                 <a href="pengaturanakun.php">Pengaturan Akun</a>
-              </li> -->
+              </li>
               <li class="last-list">
                 <a href="local.php">Logout</a>
               </li>
