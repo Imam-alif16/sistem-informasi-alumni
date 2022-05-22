@@ -83,7 +83,7 @@
               type="text"
               class="form-control"
               id="username"
-              placeholder="Username"
+              placeholder="Username (Gunakan NIM jika mendaftar sebagai alumni/user)"
               name="username"
             />
 

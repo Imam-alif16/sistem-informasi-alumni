@@ -329,7 +329,7 @@
         right: 110px;
         top: 100px;
         padding: 15px 0px;
-        width: 200px;
+        width: 225px;
         background-color: #39476d;
         border-radius: 15px;
         visibility: hidden;
@@ -464,7 +464,7 @@
         right: 110px;
         top: 100px;
         padding: 15px 0px;
-        width: 200px;
+        width: 225px;
         background-color: #39476d;
         border-radius: 15px;
         visibility: hidden;
@@ -631,7 +631,7 @@
         right: 110px;
         top: 100px;
         padding: 15px 0px;
-        width: 200px;
+        width: 225px;
         background-color: #39476d;
         border-radius: 15px;
         visibility: hidden;
@@ -837,7 +837,7 @@
         right: 110px;
         top: 100px;
         padding: 15px 0px;
-        width: 200px;
+        width: 225px;
         background-color: #39476d;
         border-radius: 15px;
         visibility: hidden;
@@ -972,6 +972,25 @@
                 font-size: 15px;
                 text-decoration: none;
                 color: #39476d;
+
+                a:link {
+                  padding: 14px 0;
+                  font-family: "Poppins";
+                  font-weight: 400;
+                  line-height: 20px;
+                  font-size: 15px;
+                  text-decoration: none;
+                  color: #7591e0;
+                }
+
+                a:hover {
+                  text-decoration: underline;
+                  color: #7591e0;
+                }
+
+                a:visited {
+                  color: #7591e0;
+                }
               }
             }
           }
